@@ -7,12 +7,11 @@ namespace assignment {
   }
 
   void BinarySearchTree::Insert(int key, int value) {
-    // Write your code here...
+    insert(key, value, root_);
   }
 
   bool BinarySearchTree::Remove(int key) {
-    // Write your code here...
-    return false;
+    return remove(key, root_);
   }
 
   void BinarySearchTree::Clear() {
@@ -63,12 +62,55 @@ namespace assignment {
   // вспомогательные методы
 
   void BinarySearchTree::insert(int key, int value, Node*& node) {
-    // Write your code here ...
+    if (node == nullptr) {
+      Node *temp = new Node(key, value);
+      node = temp;
+      node -> key = key;
+    }
+
+    if (node -> key == key) {
+      node -> value = value;
+    }
+    else if (node -> key > key) {
+      insert(key, value, node -> left);
+    }
+    else if (node -> key < key) {
+      insert(key, value, node -> right);
+    }
   }
 
   bool BinarySearchTree::remove(int key, Node*& node) {
-    // Write your code here...
-    return false;
+    if (!Contains(key)) {
+      return false;
+    }
+    if (key == node -> key) {
+
+      if (node -> left != nullptr && node -> right != nullptr ) {
+        Node *m = find_min(node->right);
+        node -> value = m->value;
+        node -> key = m -> key;
+
+        return remove(m -> key, node -> right);
+      }
+
+      if (node -> left != nullptr) {
+        Node *temp = node -> left;
+        delete node;
+        node = temp;
+        return true;
+      }
+
+      else {
+        Node *temp1 = node -> right;
+        delete node;
+        node = temp1;
+        return true;
+      }
+    }
+    if (key > node -> key) {
+      return remove(key, node -> right);
+    }
+    return remove(key, node -> left);
   }
 
   void BinarySearchTree::clear(Node* node) {
